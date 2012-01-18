@@ -1,8 +1,8 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * HSHLFramework BlueJ Project (c) 2011 - 2011 by Hans Ferchland
+ * JIT Framework Project (c) 2012 - 2011 by Hans Ferchland
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * HSHLFramework BlueJ is a framework for simple graphics-displaying on a JFrame in Java. 
+ * JIT Framework is a framework for simple graphics-displaying on a JFrame in Java. 
  * The project was created for educational purposes and may be used under the GNU 
  * Public license only.
  * 
@@ -26,11 +26,11 @@
  * 
  * Email me for any questions: hans.ferchland[at]gmx.de
  * 
- * Project: HSHLFramework BlueJ
+ * Project: JIT Framework
  * File: Text.java
  * Type: framework.objects.Text
  * 
- * Documentation created: 21.12.2011 - 01:57:35 by Hans Ferchland
+ * Documentation created: 18.01.2012 - 16:46:12 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects;
@@ -109,6 +109,15 @@ public class Text extends CanvasObject {
     public void changeColor(Color newColor) {
     	super.changeColor(newColor);
     	draw();
+    }
+    
+    /**
+     * Changes the text to display.
+     *
+     * @param text the new text
+     */
+    public void changeText(String text) {
+    	this.text = text;
     }
     
     /**
