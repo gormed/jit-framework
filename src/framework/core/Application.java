@@ -351,7 +351,11 @@ public final class Application {
 	 *            the control
 	 */
 	public void removeTimedObject(TimedControl control) {
-		timerThread.removeTimedListner(control);
+		try {
+			timerThread.removeTimedListner(control);
+		} catch (Exception e) {
+			// do nothing
+		}
 	}
 
 	/**

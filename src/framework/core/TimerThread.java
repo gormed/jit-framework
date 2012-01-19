@@ -1,8 +1,8 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * HSHLFramework BlueJ Project (c) 2011 - 2011 by Hans Ferchland
+ * JIT Framework Project (c) 2012 - 2011 by Hans Ferchland
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * HSHLFramework BlueJ is a framework for simple graphics-displaying on a JFrame in Java. 
+ * JIT Framework is a framework for simple graphics-displaying on a JFrame in Java. 
  * The project was created for educational purposes and may be used under the GNU 
  * Public license only.
  * 
@@ -26,15 +26,16 @@
  * 
  * Email me for any questions: hans.ferchland[at]gmx.de
  * 
- * Project: HSHLFramework BlueJ
+ * Project: JIT Framework
  * File: TimerThread.java
  * Type: framework.core.TimerThread
  * 
- * Documentation created: 21.12.2011 - 01:52:09 by Hans Ferchland
+ * Documentation created: 19.01.2012 - 16:35:48 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TimerTask;
 import java.util.Map.Entry;
@@ -54,6 +55,12 @@ public class TimerThread extends TimerTask {
 
 	/** The timed listener. */
 	private HashMap<TimedControl, Long> timedListener;
+	
+	/** The removed listener. */
+	private ArrayList<TimedControl> removeListener;
+	
+	/** The added listener. */
+	private ArrayList<TimedControl> addListener;
 
 	/** The application. */
 	private Application application = null;
@@ -67,6 +74,8 @@ public class TimerThread extends TimerTask {
 	public TimerThread(Application application) {
 		this.application = application;
 		this.timedListener = new HashMap<TimedControl, Long>(20);
+		this.removeListener = new ArrayList<TimedControl>();
+		this.addListener = new ArrayList<TimedControl>();
 	}
 
 	/*
@@ -92,6 +101,12 @@ public class TimerThread extends TimerTask {
 	 *            the timed event fired
 	 */
 	private void invokeTimedEvent(TimedEvent t) {
+		
+		for (TimedControl tc : addListener) {
+			timedListener.put(tc, 0L);
+		}
+		addListener.clear();
+		
 		// run through all events
 		for (Entry<TimedControl, Long> entry : timedListener.entrySet()) {
 			// get us the times called and the listener itself
@@ -104,6 +119,11 @@ public class TimerThread extends TimerTask {
 			// after that, raise the entry-value because we went one millisecond further
 			entry.setValue(time + 1);
 		}
+		
+		for (TimedControl tc : removeListener) {
+			timedListener.remove(tc);
+		}
+		removeListener.clear();
 
 	}
 
@@ -124,8 +144,8 @@ public class TimerThread extends TimerTask {
 	 *            the timed lister to add
 	 */
 	void addTimedListner(TimedControl t) {
-
-		timedListener.put(t, 0l);
+		//timedListener.put(t, 0l);
+		addListener.add(t);
 	}
 
 	/**
@@ -135,6 +155,6 @@ public class TimerThread extends TimerTask {
 	 *            the timed lister to remove
 	 */
 	void removeTimedListner(TimedControl t) {
-		timedListener.remove(t);
+		removeListener.add(t);
 	}
 }
