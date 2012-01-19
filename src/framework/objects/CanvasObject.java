@@ -136,7 +136,7 @@ public abstract class CanvasObject extends UpdateObject {
 	 * Make this CanvasObject invisible. If it was already invisible, do nothing.
 	 */
 	public void makeInvisible() {
-		erase();
+		//erase();
 		isVisible = false;
 	}
 	
