@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * JIT Framework Project (c) 2012 - 2011 by Hans Ferchland
+ * JIT Framework Project (c) 2011 - 2012 by Hans Ferchland
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
  * JIT Framework is a framework for simple graphics-displaying on a JFrame in Java. 
@@ -30,7 +30,7 @@
  * File: Text.java
  * Type: framework.objects.Text
  * 
- * Documentation created: 18.01.2012 - 16:46:12 by Hans Ferchland
+ * Documentation created: 22.01.2012 - 18:22:56 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects;

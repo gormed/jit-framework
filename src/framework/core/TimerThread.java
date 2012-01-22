@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * JIT Framework Project (c) 2012 - 2011 by Hans Ferchland
+ * JIT Framework Project (c) 2011 - 2012 by Hans Ferchland
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
  * JIT Framework is a framework for simple graphics-displaying on a JFrame in Java. 
@@ -30,7 +30,7 @@
  * File: TimerThread.java
  * Type: framework.core.TimerThread
  * 
- * Documentation created: 19.01.2012 - 16:35:48 by Hans Ferchland
+ * Documentation created: 22.01.2012 - 18:22:55 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.core;

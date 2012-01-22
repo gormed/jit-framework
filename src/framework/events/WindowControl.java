@@ -1,8 +1,8 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * HSHLFramework BlueJ Project (c) 2011 - 2011 by Hans Ferchland
+ * JIT Framework Project (c) 2011 - 2012 by Hans Ferchland
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * HSHLFramework BlueJ is a framework for simple graphics-displaying on a JFrame in Java. 
+ * JIT Framework is a framework for simple graphics-displaying on a JFrame in Java. 
  * The project was created for educational purposes and may be used under the GNU 
  * Public license only.
  * 
@@ -26,11 +26,11 @@
  * 
  * Email me for any questions: hans.ferchland[at]gmx.de
  * 
- * Project: HSHLFramework BlueJ
+ * Project: JIT Framework
  * File: WindowControl.java
  * Type: framework.events.WindowControl
  * 
- * Documentation created: 21.12.2011 - 01:52:04 by Hans Ferchland
+ * Documentation created: 22.01.2012 - 18:22:56 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.events;

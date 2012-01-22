@@ -1,8 +1,8 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * HSHLFramework Project (c) 2011 by Hans Ferchland
+ * JIT Framework Project (c) 2011 - 2012 by Hans Ferchland
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * 
- * HSHLFramework is a framework for simple graphics-displaying on a JFrame in Java. 
+ * JIT Framework is a framework for simple graphics-displaying on a JFrame in Java. 
  * The project was created for educational purposes and may be used under the GNU 
  * Public license only.
  *
@@ -29,7 +29,7 @@
  * 
  * Email me for any questions: hans.ferchland[at]gmx.de
  * 
- * Project: HSHLFramework
+ * Project: JIT Framework
  * Version: 1.0
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
