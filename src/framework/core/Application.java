@@ -326,11 +326,18 @@ public final class Application {
 
 	/**
 	 * Removes the desired update object.
+	 * <p>
+	 * This method should only be called if you explicitly don't want to update
+	 * a desired object. All <code>Updateables</code> implemented by
+	 * <code>UpdateObject</code> are added automatically. All classes inheriting
+	 * <code>CanvasObject</code> also will be added automatically through a call
+	 * to <code>super()</code> in their constructor.
+	 * </p>
 	 * 
 	 * @param updateObject
-	 *            the update object
+	 *            the update object to remove
 	 */
-	protected void removeUpdateObject(Updateable updateObject) {
+	public void removeUpdateObject(Updateable updateObject) {
 		updateObjects.remove(updateObject);
 	}
 
