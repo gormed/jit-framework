@@ -30,7 +30,7 @@
  * File: Application.java
  * Type: framework.core.Application
  * 
- * Documentation created: 22.01.2012 - 18:22:56 by Hans Ferchland
+ * Documentation created: 27.01.2012 - 20:18:04 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.core;
@@ -119,7 +119,7 @@ public final class Application {
 		 * The INITIALIZING state is reached after the start()-method was
 		 * called.
 		 */
-		INITIALIZING,
+		INITIALIZE,
 
 		/**
 		 * The RUNNING state follows the initialization when the first
@@ -204,8 +204,7 @@ public final class Application {
 	 * 
 	 */
 	private Application() {
-		applicationCanvas = Canvas.getCanvas();
-		addDefaultWindowControl();
+
 		timeState = new Time();
 
 		updateObjects = new ArrayList<Updateable>();
@@ -215,19 +214,44 @@ public final class Application {
 		timer = new Timer("TimerThread");
 
 		state = ApplicationState.CREATED;
-		System.out
-				.println("Application created, please call start() if you want to start the application-loop!");
+		System.out.println("Application created! Need to initialize!");
 	}
 
 	/**
-	 * Starts the application by initiating a infinite gameloop. The "isRunning"
-	 * flag indicates the termination of the application.
+	 * Initializes the Application.
+	 * 
+	 * <p>
+	 * This method has to be called before the application is started through
+	 * <code>start()</code>.
+	 * </p>
+	 * 
+	 * @param applet
+	 *            the applet
+	 */
+	public void initialize(JITApplet applet) {
+		if (state == ApplicationState.CREATED) {
+			state = ApplicationState.INITIALIZE;
+			if (applet != null) {
+				applicationCanvas = Canvas.getAppletCanvas(applet);
+				applet.setApplication(this);
+			} else {
+				applicationCanvas = Canvas.getCanvas();
+			}
+
+			addDefaultWindowControl();
+			System.out.println("Application initialized!");
+		}
+	}
+
+	/**
+	 * Starts the application by initiating a infinite game-loop. The
+	 * "isRunning" flag indicates the termination of the application.
 	 * 
 	 * You can terminate the loop by calling the terminate()-method.
 	 */
 	public void start() {
-		if (state == ApplicationState.CREATED) {
-			state = ApplicationState.INITIALIZING;
+		if (state == ApplicationState.INITIALIZE) {
+
 			System.out.println("Application started!");
 			isRunning = true;
 
@@ -236,7 +260,8 @@ public final class Application {
 
 			state = ApplicationState.RUNNING;
 		} else {
-
+			System.out
+					.println("The Application is not initialized! Please call initialize() before start!");
 		}
 	}
 
@@ -288,7 +313,9 @@ public final class Application {
 			updateThread = null;
 		}
 
-		applicationCanvas.terminate();
+		if (applicationCanvas != null)
+			applicationCanvas.terminate();
+
 		System.out.println("Application terminating!");
 		System.exit(0);
 	}
@@ -312,6 +339,27 @@ public final class Application {
 	 */
 	public boolean isRunning() {
 		return isRunning;
+	}
+
+	/**
+	 * Checks if the application is an applet.
+	 * 
+	 * @return true, if it is an applet
+	 */
+	public boolean isApplet() {
+		return applicationCanvas.getApplet() != null;
+	}	
+	
+	/**
+	 * Gets the applet.
+	 *
+	 * @return the applet
+	 */
+	public JITApplet getApplet() {
+		if (isApplet())
+			return applicationCanvas.getApplet();
+		else
+			return null;
 	}
 
 	/**
@@ -405,7 +453,7 @@ public final class Application {
 	}
 
 	// *******************************************************************************
-	// * Frame and Canvas section
+	// * Canvas Section
 	// *******************************************************************************
 
 	/**

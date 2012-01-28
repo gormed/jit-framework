@@ -42,11 +42,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
-
 import framework.core.Application;
 import framework.core.Canvas;
+import framework.core.JITApplet;
 import framework.core.Time;
 
 import framework.events.MouseControl;
@@ -92,14 +93,24 @@ public class Picture extends CanvasObject implements MouseControl {
 	public Picture(int xPos, int yPos, String imagePath) {
 		super(xPos, yPos);
 		this.image = null;
+
 		try {
-			image = ImageIO.read(new File(imagePath));
-		} catch (IOException e) {
-			System.out
-					.println("Could not find image in path: "
-							+ imagePath
-							+ "! Please check if the image is there. The defauld path is your project directory!");
+			if (Application.getInstance().isApplet()) {
+				JITApplet applet = Application.getInstance().getApplet();
+
+				image = ImageIO.read(new URL(applet.getCodeBase(), imagePath));
+
+			} else
+				image = ImageIO.read(new File(imagePath));
+		} catch (IllegalArgumentException iae) {
+			System.err
+			.println("Could not find image in path: "
+					+ imagePath
+					+ "! Please check if the image is there. The default path is your project directory!");
+		} catch (IOException ioe) {
+			System.err.println("Error during image-loading!");
 		}
+		
 		Canvas.getCanvas().draw(this, Color.white, null);
 		Application.getInstance().addMouseControl(this);
 	}
@@ -111,7 +122,7 @@ public class Picture extends CanvasObject implements MouseControl {
 	 */
 	@Override
 	public void draw() {
-		if (isVisible()) {
+		if (isVisible() && image != null) {
 			Canvas canvas = Canvas.getCanvas();
 			canvas.drawImage(image, xPosition, yPosition);
 		}
@@ -124,11 +135,13 @@ public class Picture extends CanvasObject implements MouseControl {
 		if (isVisible()) {
 			image.flush();
 			image = null;
-			
+
 		}
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#dispose()
 	 */
 	@Override
@@ -137,7 +150,9 @@ public class Picture extends CanvasObject implements MouseControl {
 		return super.dispose();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see objects.CanvasObject#containsPoint(java.awt.Point)
 	 */
 	@Override
@@ -154,7 +169,9 @@ public class Picture extends CanvasObject implements MouseControl {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see events.MouseControl#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -162,7 +179,9 @@ public class Picture extends CanvasObject implements MouseControl {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see events.MouseControl#mouseEntered(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -170,7 +189,9 @@ public class Picture extends CanvasObject implements MouseControl {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see events.MouseControl#mouseExited(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -178,30 +199,37 @@ public class Picture extends CanvasObject implements MouseControl {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see events.MouseControl#mousePressed(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void mousePressed(MouseEvent event) {
-		if ( containsPoint(new Point(event.getX(), event.getY())) ) {
+		if (containsPoint(new Point(event.getX(), event.getY()))) {
 			clickStarted = true;
 			onClick(event);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see events.MouseControl#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		if ( containsPoint(new Point(event.getX(), event.getY())) && clickStarted) {
+		if (containsPoint(new Point(event.getX(), event.getY()))
+				&& clickStarted) {
 			clickStarted = true;
 			onRelease(event);
 		}
 		clickStarted = false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see events.MouseControl#mouseWheelMoved(java.awt.event.MouseWheelEvent)
 	 */
 	@Override
@@ -209,7 +237,9 @@ public class Picture extends CanvasObject implements MouseControl {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see events.MouseControl#mouseDragged(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -217,7 +247,9 @@ public class Picture extends CanvasObject implements MouseControl {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see events.MouseControl#mouseMoved(java.awt.event.MouseEvent)
 	 */
 	@Override
@@ -225,27 +257,33 @@ public class Picture extends CanvasObject implements MouseControl {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#update(framework.core.Time)
 	 */
 	@Override
 	public void update(Time time) {
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#onClick(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void onClick(MouseEvent event) {
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#onRelease(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void onRelease(MouseEvent event) {
-		
+
 	}
 }

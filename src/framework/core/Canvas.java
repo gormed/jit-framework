@@ -30,7 +30,7 @@
  * File: Canvas.java
  * Type: framework.core.Canvas
  * 
- * Documentation created: 22.01.2012 - 18:22:57 by Hans Ferchland
+ * Documentation created: 28.01.2012 - 19:36:07 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.core;
@@ -68,6 +68,9 @@ public class Canvas {
 	/** The canvas singleton. */
 	private static Canvas canvasSingleton;
 
+	/** The is applet. */
+	private static boolean isApplet = false;
+
 	/**
 	 * Factory method to get the canvas singleton object.
 	 * 
@@ -81,10 +84,42 @@ public class Canvas {
 		return canvasSingleton;
 	}
 
+	/**
+	 * Factory method to get the canvas singleton object.
+	 * 
+	 * @param applet
+	 *            the app
+	 * @return the applet canvas
+	 */
+	static Canvas getAppletCanvas(JITApplet jitApplet) {
+		if (canvasSingleton == null) {
+			canvasSingleton = new Canvas(300, 300, Color.white, jitApplet);
+			setAsApplet(true);
+		}
+		canvasSingleton.setVisible(true);
+		return canvasSingleton;
+	}
+
+	/**
+	 * As applet.
+	 * 
+	 * @param value
+	 *            the value
+	 */
+	static void setAsApplet(boolean value) {
+		isApplet = value;
+	}
+
 	// ----- instance part -----
+
+	/** The applet. */
+	private JITApplet applet;
 
 	/** The frame. */
 	private JFrame frame;
+
+	/** The container. */
+	private Container container;
 
 	/** The default window control. */
 	private WindowControl windowControl;
@@ -120,20 +155,49 @@ public class Canvas {
 	 *            the bg colour
 	 */
 	private Canvas(String title, int width, int height, Color bgColour) {
-		canvas = new CanvasPane();
-		canvas.setPreferredSize(new Dimension(width, height));
 
 		backgroundColor = bgColour;
+		objects = new ArrayList<CanvasObject>();
+		shapes = new HashMap<Object, ShapeDescription>();
 
+		canvas = new CanvasPane();
+		canvas.setPreferredSize(new Dimension(width, height));
+		
 		frame = new JFrame();
 		frame.setContentPane(canvas);
 		frame.setResizable(false);
 		frame.setTitle(title);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
+		
+		container = frame;
 
+	}
+
+	/**
+	 * Instantiates a new canvas.
+	 * 
+	 * @param title
+	 *            the title
+	 * @param width
+	 *            the width
+	 * @param height
+	 *            the height
+	 * @param bgColour
+	 *            the bg colour
+	 * @param applet
+	 *            the applet
+	 */
+	private Canvas(int width, int height, Color bgColour, JITApplet applet) {
+
+		backgroundColor = bgColour;
 		objects = new ArrayList<CanvasObject>();
 		shapes = new HashMap<Object, ShapeDescription>();
+
+		this.applet = applet;
+		applet.setPreferredSize(new Dimension(width, height));
+		
+		container = this.applet;
 	}
 
 	/**
@@ -142,7 +206,10 @@ public class Canvas {
 	 * @return the frame
 	 */
 	protected JFrame getFrame() {
-		return frame;
+		if (!isApplet)
+			return frame;
+		else
+			return null;
 	}
 
 	/**
@@ -151,7 +218,22 @@ public class Canvas {
 	 * @return the pane
 	 */
 	protected CanvasPane getPane() {
-		return canvas;
+		if (!isApplet)
+			return canvas;
+		else
+			return null;
+	}
+
+	/**
+	 * Gets the applet.
+	 * 
+	 * @return the applet
+	 */
+	JITApplet getApplet() {
+		if (isApplet)
+			return applet;
+		else
+			return null;
 	}
 
 	/**
@@ -161,10 +243,14 @@ public class Canvas {
 	 *            the control
 	 */
 	protected void addWindowControl(WindowControl control) {
-		frame.removeWindowListener(windowControl);
-		if (windowControl == null)
-			windowControl = control;
-		frame.addWindowListener(control);
+		if (!isApplet) {
+			frame.removeWindowListener(windowControl);
+			if (windowControl == null)
+				windowControl = control;
+			frame.addWindowListener(control);
+		} else {
+			// TODO: Listen to browser events?
+		}
 	}
 
 	/**
@@ -174,7 +260,11 @@ public class Canvas {
 	 *            the control
 	 */
 	protected void removeWindowControl(WindowControl control) {
-		frame.removeWindowListener(control);
+		if (!isApplet) {
+			frame.removeWindowListener(control);
+		} else {
+			// TODO: Listen to browser events?
+		}
 	}
 
 	/**
@@ -184,12 +274,14 @@ public class Canvas {
 	 *            the control
 	 */
 	protected void addMouseControl(MouseControl control) {
-		canvas.removeMouseListener(control);
-		canvas.removeMouseMotionListener(control);
-		canvas.removeMouseWheelListener(control);
-		canvas.addMouseListener(control);
-		canvas.addMouseMotionListener(control);
-		canvas.addMouseWheelListener(control);
+
+		container.removeMouseListener(control);
+		container.removeMouseMotionListener(control);
+		container.removeMouseWheelListener(control);
+		container.addMouseListener(control);
+		container.addMouseMotionListener(control);
+		container.addMouseWheelListener(control);
+
 	}
 
 	/**
@@ -199,9 +291,10 @@ public class Canvas {
 	 *            the control
 	 */
 	protected void removeMouseControl(MouseControl control) {
-		canvas.removeMouseListener(control);
-		canvas.removeMouseMotionListener(control);
-		canvas.removeMouseWheelListener(control);
+		container.removeMouseListener(control);
+		container.removeMouseMotionListener(control);
+		container.removeMouseWheelListener(control);
+
 	}
 
 	/**
@@ -211,8 +304,8 @@ public class Canvas {
 	 *            the control
 	 */
 	protected void addKeyboardControl(KeyboardControl control) {
-		frame.removeKeyListener(control);
-		frame.addKeyListener(control);
+		container.removeKeyListener(control);
+		container.addKeyListener(control);
 	}
 
 	/**
@@ -222,7 +315,7 @@ public class Canvas {
 	 *            the control
 	 */
 	protected void removeKeyboardControl(KeyboardControl control) {
-		frame.removeKeyListener(control);
+		container.removeKeyListener(control);
 	}
 
 	/**
@@ -232,7 +325,8 @@ public class Canvas {
 	 *            the new title
 	 */
 	protected void setTitle(String title) {
-		frame.setTitle(title);
+		if (!isApplet)
+			frame.setTitle(title);
 	}
 
 	/**
@@ -267,14 +361,22 @@ public class Canvas {
 		if (graphic == null) {
 			// first time: instantiate the offscreen image and fill it with
 			// the background colour
-			Dimension size = canvas.getSize();
-			canvasImage = canvas.createImage(size.width, size.height);
+			Dimension size;
+			if (isApplet) {
+				size = applet.getSize();
+				canvasImage = applet.createImage(size.width, size.height);
+				applet.setCanvasImage(canvasImage);
+			} else {
+				size = canvas.getSize();
+				canvasImage = canvas.createImage(size.width, size.height);
+			}
+			
 			graphic = (Graphics2D) canvasImage.getGraphics();
 			graphic.setColor(backgroundColor);
 			graphic.fillRect(0, 0, size.width, size.height);
 			graphic.setColor(Color.black);
 		}
-		frame.setVisible(visible);
+		container.setVisible(visible);
 	}
 
 	/**
@@ -286,15 +388,29 @@ public class Canvas {
 	 *            the height
 	 */
 	protected void setDimensions(int width, int height) {
-		canvas.setPreferredSize(new Dimension(width, height));
-		canvas.setMaximumSize(new Dimension(width, height));
-		canvasImage = canvas.createImage(width, height);
-		canvasImage.setAccelerationPriority(1);
+		
+		if (isApplet) {
+			applet.setPreferredSize(new Dimension(width, height));
+			applet.setMaximumSize(new Dimension(width, height));
+			
+			canvasImage = applet.createImage(width, height);
+			applet.setCanvasImage(canvasImage);
+		} else {
+			canvas.setPreferredSize(new Dimension(width, height));
+			canvas.setMaximumSize(new Dimension(width, height));
+			
+			canvasImage = canvas.createImage(width, height);
+		}
+
+		//canvasImage.setAccelerationPriority(1);
+
 		graphic = (Graphics2D) canvasImage.getGraphics();
-		graphic.setColor(backgroundColor);
-		graphic.fillRect(0, 0, width, height);
+		//graphic.setColor(backgroundColor);
+		//graphic.fillRect(0, 0, width, height);
 		graphic.setColor(Color.black);
-		frame.pack();
+		
+		if (!isApplet)
+			frame.pack();
 	}
 
 	/**
@@ -463,7 +579,7 @@ public class Canvas {
 				((ShapeDescription) shapes.get(c)).draw(graphic);
 		}
 
-		canvas.repaint();
+		container.repaint();
 	}
 
 	/**
@@ -477,10 +593,11 @@ public class Canvas {
 				.clone();
 
 		for (CanvasObject c : clone) {
-			c.draw();
+			if (c != null)
+				c.draw();
 		}
 
-		canvas.repaint();
+		container.repaint();
 	}
 
 	/**
@@ -489,7 +606,7 @@ public class Canvas {
 	private void erase() {
 		Color original = graphic.getColor();
 		graphic.setColor(backgroundColor);
-		Dimension size = canvas.getSize();
+		Dimension size = container.getSize();
 		graphic.fill(new Rectangle(0, 0, size.width, size.height));
 		graphic.setColor(original);
 	}
@@ -498,9 +615,14 @@ public class Canvas {
 	 * Terminates the canvas frame to allow termination.
 	 */
 	protected void terminate() {
-		frame.setVisible(false);
-		// frame.dispose();
-		frame = null;
+		if (!isApplet) {
+			frame.setVisible(false);
+			// frame.dispose();
+			frame = null;
+		} else {
+			applet.setVisible(false);
+			applet.destroy();
+		}
 	}
 
 	/************************************************************************
@@ -519,7 +641,16 @@ public class Canvas {
 		 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 		 */
 		public void paint(Graphics g) {
-			g.drawImage(canvasImage, 0, 0, null);
+			if (canvasImage != null)
+				g.drawImage(canvasImage, 0, 0, null);
+		}
+		
+		/* (non-Javadoc)
+		 * @see javax.swing.JComponent#update(java.awt.Graphics)
+		 */
+		@Override
+		public void update(Graphics g) {
+			paint(g);
 		}
 	}
 
