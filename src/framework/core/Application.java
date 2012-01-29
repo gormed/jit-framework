@@ -65,12 +65,19 @@ import framework.events.WindowControl;
  * <code>terminate()</code>-method.
  * </p>
  * <p>
- * You can use <code>pause()</code> and <code>unpause()</code> to handle
+ * You can use <code>pause()</code> and <code>resume()</code> to handle
  * minimizing the windows. Also a game-menu could be implemented with this.
+ * </p>
+ * <p>
+ * Since version 1.1 the <code>Application</code> can display their content in a
+ * JFrame or in a browser-applet. See <code>JITApplet</code> for more.
  * </p>
  * 
  * @author Hans Ferchland
- * @version v1.0
+ * @version JIT Framework 1.1
+ * @see JITApplet
+ * @see Canvas
+ * @see UpdateThread
  * 
  */
 public final class Application {
@@ -247,7 +254,7 @@ public final class Application {
 	 * Starts the application by initiating a infinite game-loop. The
 	 * "isRunning" flag indicates the termination of the application.
 	 * 
-	 * You can terminate the loop by calling the terminate()-method.
+	 * You can terminate the loop by calling the <code>terminate()</code>-method.
 	 */
 	public void start() {
 		if (state == ApplicationState.INITIALIZE) {
@@ -317,7 +324,10 @@ public final class Application {
 			applicationCanvas.terminate();
 
 		System.out.println("Application terminating!");
+
+		applicationSingleton = null;
 		System.exit(0);
+
 	}
 
 	/**
@@ -348,11 +358,11 @@ public final class Application {
 	 */
 	public boolean isApplet() {
 		return applicationCanvas.getApplet() != null;
-	}	
-	
+	}
+
 	/**
 	 * Gets the applet.
-	 *
+	 * 
 	 * @return the applet
 	 */
 	public JITApplet getApplet() {
@@ -418,6 +428,7 @@ public final class Application {
 	 * 
 	 * @param timeState
 	 *            the time state
+	 * @see Time
 	 */
 	private void updateObjects(Time timeState) {
 		@SuppressWarnings("unchecked")
@@ -430,12 +441,18 @@ public final class Application {
 	}
 
 	/**
-	 * Application tick.
+	 * The application tick is called by the <code>UpdateThread</code>.
 	 * 
+	 * <p>
 	 * This is the main loop method, means this method is called every time
 	 * until the frame closes. First time it updates all your objects that need
-	 * a update (by calling its update()-method). Than it calls all your objects
-	 * draw()-methods.
+	 * a update (by calling its <code>update()</code>-method). Than it calls all
+	 * your objects <code>draw()</code>-methods.
+	 * </p>
+	 * 
+	 * @see UpdateThread
+	 * @see Time
+	 * @see Canvas
 	 * 
 	 */
 	protected void applicationTick() {

@@ -40,7 +40,22 @@ import java.util.concurrent.TimeUnit;
 /**
  * The Class UpdateThread is responsible for the looping for animation-purposes.
  * 
+ * <p>
+ * The <code>UpdateThread</code> loops the applications instructions until the
+ * user quits. This is done in a separate thread for optimal performance issues.
+ * The desired gap between two ticks is 16 ms which means approximately 60 calls
+ * the second.
+ * <p>
+ * 
+ * <p>
+ * To retrieve the actual time between calls use the time-state given in every
+ * <code>update(Time timeState)</code> method. See the class <code>Time</code> for more.
+ * </p>
+ * 
  * @author Hans Ferchland
+ * @version JIT Framework 1.0
+ * @see Time
+ * @see Application
  */
 
 public class UpdateThread extends Thread {
@@ -66,10 +81,10 @@ public class UpdateThread extends Thread {
 	@Override
 	public void run() {
 		while (application.isRunning() && !isInterrupted()) {
-			
+
 			application.applicationTick();
 			try {
-				TimeUnit.MILLISECONDS.sleep(16);
+				TimeUnit.MILLISECONDS.sleep(15);
 			} catch (InterruptedException e) {
 				interrupt();
 			}

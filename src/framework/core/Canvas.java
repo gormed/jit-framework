@@ -47,15 +47,21 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * Canvas is a class to allow for simple graphical drawing on a canvas. This is
+ * Canvas is a class to allow for simple graphical drawing on a canvas. 
+ * 
+ * <p>This is
  * a modification of the general purpose Canvas, specially made for the BlueJ
- * "shapes" example.
+ * "shapes" example.</p>
+ * 
+ * <p>
+ * The enhanced canvas can handle JFrame and Applet displaying. 
+ * </p>
  * 
  * @author Bruce Quig
  * @author Michael Kölling (mik)
  * @author Hans Ferchland (modified)
  * 
- * @version 1.6 (shapes)
+ * @version JITFramework 1.1
  */
 
 public class Canvas {
@@ -162,14 +168,14 @@ public class Canvas {
 
 		canvas = new CanvasPane();
 		canvas.setPreferredSize(new Dimension(width, height));
-		
+
 		frame = new JFrame();
 		frame.setContentPane(canvas);
 		frame.setResizable(false);
 		frame.setTitle(title);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		
+
 		container = frame;
 
 	}
@@ -196,7 +202,7 @@ public class Canvas {
 
 		this.applet = applet;
 		applet.setPreferredSize(new Dimension(width, height));
-		
+
 		container = this.applet;
 	}
 
@@ -370,7 +376,7 @@ public class Canvas {
 				size = canvas.getSize();
 				canvasImage = canvas.createImage(size.width, size.height);
 			}
-			
+
 			graphic = (Graphics2D) canvasImage.getGraphics();
 			graphic.setColor(backgroundColor);
 			graphic.fillRect(0, 0, size.width, size.height);
@@ -388,27 +394,27 @@ public class Canvas {
 	 *            the height
 	 */
 	protected void setDimensions(int width, int height) {
-		
+
 		if (isApplet) {
 			applet.setPreferredSize(new Dimension(width, height));
 			applet.setMaximumSize(new Dimension(width, height));
-			
+
 			canvasImage = applet.createImage(width, height);
 			applet.setCanvasImage(canvasImage);
 		} else {
 			canvas.setPreferredSize(new Dimension(width, height));
 			canvas.setMaximumSize(new Dimension(width, height));
-			
+
 			canvasImage = canvas.createImage(width, height);
 		}
 
-		//canvasImage.setAccelerationPriority(1);
+		// canvasImage.setAccelerationPriority(1);
 
 		graphic = (Graphics2D) canvasImage.getGraphics();
-		//graphic.setColor(backgroundColor);
-		//graphic.fillRect(0, 0, width, height);
+		// graphic.setColor(backgroundColor);
+		// graphic.fillRect(0, 0, width, height);
 		graphic.setColor(Color.black);
-		
+
 		if (!isApplet)
 			frame.pack();
 	}
@@ -621,7 +627,7 @@ public class Canvas {
 			frame = null;
 		} else {
 			applet.setVisible(false);
-			applet.destroy();
+			//applet.destroy();
 		}
 	}
 
@@ -644,8 +650,10 @@ public class Canvas {
 			if (canvasImage != null)
 				g.drawImage(canvasImage, 0, 0, null);
 		}
-		
-		/* (non-Javadoc)
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see javax.swing.JComponent#update(java.awt.Graphics)
 		 */
 		@Override
