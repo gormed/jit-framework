@@ -36,12 +36,27 @@
 package framework.core;
 
 /**
- * The class Time for calculating time-gaps between update-calls, normally an
- * gap should be 16 ms. 
- * <p>The class measures in milliseconds! If you use second
- * base formula for movement or rotation, multiply by 0.001f.</p>
+ * The class Time for calculating time-gaps between update-calls, usually a
+ * time-gap should be around 16 ms.
+ * <p>
+ * The class measures in <b>milliseconds</b>! If you use second base formula for
+ * movement or rotation, multiply by 0.001f.
+ * </p>
+ * <p>
+ * The <code>getTimeGap()</code> method gives the delta time, the time since the
+ * last call of the <code>update()</code> method of a <code>CanvasObject</code>
+ * and/or <code>UpdateObject</code>. Usually the time-gap should be around 16 ms
+ * (60 times the second), but in case you are drawing a lot it can be much
+ * higher.
+ * </p>
+ * <p>
+ * The <code>getActualTime()</code> returns the system-time in milliseconds
+ * since when the system is running.
+ * </p>
  * 
  * @author Hans Ferchland
+ * @see UpdateObject
+ * @see System
  */
 public class Time {
 

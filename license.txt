@@ -30,6 +30,6 @@
  * Email me for any questions: hans.ferchland[at]gmx.de
  * 
  * Project: JIT Framework
- * Version: 1.0
+ * Version: 1.1
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

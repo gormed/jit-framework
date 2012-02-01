@@ -41,20 +41,21 @@ import framework.events.KeyboardControl;
 import framework.events.MouseControl;
 import framework.events.WindowControl;
 
-import framework.objects.CanvasObject;
+import framework.objects.base.CanvasObject;
 
 import java.awt.*;
 import java.util.*;
 
 /**
- * Canvas is a class to allow for simple graphical drawing on a canvas. 
- * 
- * <p>This is
- * a modification of the general purpose Canvas, specially made for the BlueJ
- * "shapes" example.</p>
+ * Canvas is a class to allow for simple graphical drawing on a canvas.
  * 
  * <p>
- * The enhanced canvas can handle JFrame and Applet displaying. 
+ * This is a modification of the general purpose Canvas, specially made for the
+ * BlueJ "shapes" example.
+ * </p>
+ * 
+ * <p>
+ * The enhanced canvas can handle JFrame and Applet displaying.
  * </p>
  * 
  * @author Bruce Quig
@@ -280,14 +281,22 @@ public class Canvas {
 	 *            the control
 	 */
 	protected void addMouseControl(MouseControl control) {
-
-		container.removeMouseListener(control);
-		container.removeMouseMotionListener(control);
-		container.removeMouseWheelListener(control);
-		container.addMouseListener(control);
-		container.addMouseMotionListener(control);
-		container.addMouseWheelListener(control);
-
+		if (canvas != null) {
+			canvas.removeMouseListener(control);
+			canvas.removeMouseMotionListener(control);
+			canvas.removeMouseWheelListener(control);
+			canvas.addMouseListener(control);
+			canvas.addMouseMotionListener(control);
+			canvas.addMouseWheelListener(control);
+		} 
+		else {
+			container.removeMouseListener(control);
+			container.removeMouseMotionListener(control);
+			container.removeMouseWheelListener(control);
+			container.addMouseListener(control);
+			container.addMouseMotionListener(control);
+			container.addMouseWheelListener(control);
+		}
 	}
 
 	/**
@@ -297,10 +306,15 @@ public class Canvas {
 	 *            the control
 	 */
 	protected void removeMouseControl(MouseControl control) {
-		container.removeMouseListener(control);
-		container.removeMouseMotionListener(control);
-		container.removeMouseWheelListener(control);
-
+		if (canvas != null) {
+			canvas.removeMouseListener(control);
+			canvas.removeMouseMotionListener(control);
+			canvas.removeMouseWheelListener(control);
+		} else {
+			container.removeMouseListener(control);
+			container.removeMouseMotionListener(control);
+			container.removeMouseWheelListener(control);
+		}
 	}
 
 	/**
@@ -382,6 +396,7 @@ public class Canvas {
 			graphic.fillRect(0, 0, size.width, size.height);
 			graphic.setColor(Color.black);
 		}
+
 		container.setVisible(visible);
 	}
 
@@ -599,7 +614,7 @@ public class Canvas {
 				.clone();
 
 		for (CanvasObject c : clone) {
-			if (c != null)
+			if (c != null && c.isVisible())
 				c.draw();
 		}
 
@@ -623,11 +638,9 @@ public class Canvas {
 	protected void terminate() {
 		if (!isApplet) {
 			frame.setVisible(false);
-			// frame.dispose();
 			frame = null;
 		} else {
 			applet.setVisible(false);
-			//applet.destroy();
 		}
 	}
 

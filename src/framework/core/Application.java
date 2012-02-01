@@ -30,7 +30,7 @@
  * File: Application.java
  * Type: framework.core.Application
  * 
- * Documentation created: 27.01.2012 - 20:18:04 by Hans Ferchland
+ * Documentation created: 31.01.2012 - 22:33:03 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.core;
@@ -39,7 +39,9 @@ import framework.interfaces.Updateable;
 
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Timer;
 
 import framework.events.KeyboardControl;
@@ -185,6 +187,36 @@ public final class Application {
 	 */
 	private UpdateThread updateThread;
 
+	/** The loader function to execute. */
+	private LoaderFunction loaderFunction;
+
+	private HashSet<WorkerThread> workerThreadSet;
+
+	/**
+	 * The Class LoaderFunction.
+	 */
+	class LoaderFunction {
+
+		/** The carryer. */
+		Object carryer;
+
+		/** The function name. */
+		Method method;
+
+		/**
+		 * Instantiates a new loader function.
+		 * 
+		 * @param instance
+		 *            the instance
+		 * @param functionName
+		 *            the function name
+		 */
+		public LoaderFunction(Object carryer, Method method) {
+			this.carryer = carryer;
+			this.method = method;
+		}
+	}
+
 	/**
 	 * The applications state, see ApplicationState-enum for more.
 	 * 
@@ -218,7 +250,9 @@ public final class Application {
 		updateThread = new UpdateThread(this);
 
 		timerThread = new TimerThread(this);
-		timer = new Timer("TimerThread");
+		timer = new Timer("TimerThread", true);
+
+		workerThreadSet = new HashSet<WorkerThread>();
 
 		state = ApplicationState.CREATED;
 		System.out.println("Application created! Need to initialize!");
@@ -233,7 +267,7 @@ public final class Application {
 	 * </p>
 	 * 
 	 * @param applet
-	 *            the applet
+	 *            the applet, if used as an applet otherwise null
 	 */
 	public void initialize(JITApplet applet) {
 		if (state == ApplicationState.CREATED) {
@@ -254,7 +288,8 @@ public final class Application {
 	 * Starts the application by initiating a infinite game-loop. The
 	 * "isRunning" flag indicates the termination of the application.
 	 * 
-	 * You can terminate the loop by calling the <code>terminate()</code>-method.
+	 * You can terminate the loop by calling the <code>terminate()</code>
+	 * -method.
 	 */
 	public void start() {
 		if (state == ApplicationState.INITIALIZE) {
@@ -262,9 +297,13 @@ public final class Application {
 			System.out.println("Application started!");
 			isRunning = true;
 
-			updateThread.start();
+			executeLoaderFunction();
+
+			if (!updateThread.isAlive())
+				updateThread.start();
 			timer.schedule(timerThread, 0, 1);
 
+			setVisible(true);
 			state = ApplicationState.RUNNING;
 		} else {
 			System.out
@@ -302,9 +341,13 @@ public final class Application {
 				updateThread = new UpdateThread(this);
 				updateThread.start();
 			}
-
+			if (timer == null) {
+				timer = new Timer("TimerThread", true);
+				timer.schedule(timerThread, 1000, 1);
+			}
 			System.out.println("Application resumed!");
 		}
+		applicationCanvas.setVisible(true);
 	}
 
 	/**
@@ -312,21 +355,46 @@ public final class Application {
 	 * terminating the canvas.
 	 */
 	public void terminate() {
+		boolean isApplet = isApplet();
+		
 		state = ApplicationState.EXITING;
 		isRunning = false;
-
+		
 		if (updateThread != null) {
-			updateThread.interrupt();
-			updateThread = null;
+			try {
+				updateThread.interrupt();
+				updateThread = null;
+			} catch (SecurityException e) {
+				e.printStackTrace();
+				System.err
+						.println("The current thread cannot modify this thread!");
+			}
 		}
 
-		if (applicationCanvas != null)
+		if (applicationCanvas != null) {
 			applicationCanvas.terminate();
+			applicationCanvas = null;
+		}
+
+		if (timer != null) {
+			timerThread.cancel();
+			timer.cancel();
+			timerThread = null;
+			timer = null;
+		}
+
+		for (WorkerThread w : workerThreadSet) {
+			if (w != null)
+				w.interrupt();
+		}
+		workerThreadSet.clear();
+		workerThreadSet = null;
 
 		System.out.println("Application terminating!");
 
 		applicationSingleton = null;
-		System.exit(0);
+		if (!isApplet)
+			System.exit(0);
 
 	}
 
@@ -363,13 +431,90 @@ public final class Application {
 	/**
 	 * Gets the applet.
 	 * 
-	 * @return the applet
+	 * @return the applet if <code>Application</code> is an applet, otherwise
+	 *         null.
 	 */
 	public JITApplet getApplet() {
 		if (isApplet())
 			return applicationCanvas.getApplet();
 		else
 			return null;
+	}
+
+	/**
+	 * Adds a loading function that will be executed before application starts.
+	 * 
+	 * @param carryer
+	 *            the instance of an object that has a function described by
+	 *            'functionName' string
+	 * @param functionName
+	 *            the name of the function to execute
+	 */
+	public void addLoadingFunction(Object carryer, String functionName) {
+		loaderFunction = null;
+
+		Method method = null;
+		try {
+			method = carryer.getClass().getDeclaredMethod(functionName,
+					new Class[0]);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			System.err.println("No function name given!");
+			return;
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			System.err.println("No matching method found!");
+			return;
+		} catch (SecurityException e) {
+			e.printStackTrace();
+			System.err
+					.println("SecurityException thrown! See 'getDeclaredMethod()' in 'Class' for more.");
+			return;
+		} finally {
+			loaderFunction = new LoaderFunction(carryer, method);
+		}
+
+	}
+
+	/**
+	 * Executes the loader function.
+	 */
+	private void executeLoaderFunction() {
+		if (loaderFunction == null)
+			return;
+
+		WorkerThread worker;
+
+		worker = new WorkerThread(loaderFunction);
+
+		worker.start();
+	}
+
+	/**
+	 * Adds a worker thread to the application so it can keep a look at all
+	 * threads created.
+	 * 
+	 * @param worker
+	 *            the worker
+	 * @return true, if successful
+	 * 
+	 * @see WorkerThread
+	 */
+	boolean addWorkerThread(WorkerThread worker) {
+		return workerThreadSet.add(worker);
+	}
+
+	/**
+	 * Removes a worker thread from the application if the thread is
+	 * interrupted.
+	 * 
+	 * @param worker
+	 *            the worker
+	 * @return true, if successful
+	 * @see WorkerThread
+	 */
+	boolean removeWorkerThread(WorkerThread worker) {
+		return workerThreadSet.remove(worker);
 	}
 
 	/**
@@ -430,13 +575,14 @@ public final class Application {
 	 *            the time state
 	 * @see Time
 	 */
-	private void updateObjects(Time timeState) {
+	private synchronized void updateObjects(Time timeState) {
 		@SuppressWarnings("unchecked")
 		ArrayList<Updateable> cloned = (ArrayList<Updateable>) updateObjects
 				.clone();
 
 		for (Updateable u : cloned) {
-			u.update(timeState);
+			if (u != null)
+				u.update(timeState);
 		}
 	}
 
