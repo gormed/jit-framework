@@ -39,8 +39,8 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import framework.core.Canvas;
 import framework.core.Time;
+import framework.objects.base.AbstractLine;
 
 
 /**
@@ -51,24 +51,14 @@ import framework.core.Time;
  *
  * @author Hans Ferchland
  */
-public class Line extends CanvasObject {
+public class Line extends AbstractLine {
 
-	/** The start point. */
-	private Point start;
-	
-	/** The end point. */
-	private Point end;
-	
 	/**
 	 * Instantiates a new line with default parameter.
 	 *
 	 */
 	public Line() {
-		super(0, 0);
-		color = Color.black;
-		start = new Point(20, 20);
-		end = new Point(60, 30);
-		Canvas.getCanvas().draw(this, color, null);
+		super();
 	}
 	
 	/**
@@ -79,47 +69,9 @@ public class Line extends CanvasObject {
 	 * @param color the color of the line
 	 */
 	public Line(Point start, Point end, Color color) {
-		super(0, 0);
-		this.color = color;
-		this.start = start;
-		this.end = end;
-		Canvas.getCanvas().draw(this, color, null);
-	}
-
-	/**
-	 * Sets the start point.
-	 *
-	 * @param newStart the new start
-	 * @param newEnd the new end
-	 */
-	public void setStartPoint(Point newStart, Point newEnd) {
-		start = newStart;
-		end = newEnd;
+		super(start, end, color);
 	}
 	
-	/* (non-Javadoc)
-	 * @see objects.CanvasObject#draw()
-	 */
-	@Override
-	public void draw() {
-        if(isVisible()) {
-            Canvas canvas = Canvas.getCanvas();
-            canvas.setForegroundColor(color);
-            canvas.drawLine(start.x, start.y, end.x, end.y);
-        }
-	}
-
-    /**
-     * Erase the line from screen.
-     */
-	protected void erase()
-    {
-        if(isVisible()) {
-            Canvas canvas = Canvas.getCanvas();
-            canvas.erase(this);
-        }
-    }
-
 	/* (non-Javadoc)
 	 * @see framework.core.UpdateObject#update(framework.core.Time)
 	 */

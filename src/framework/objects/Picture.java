@@ -30,38 +30,24 @@
  * File: Picture.java
  * Type: framework.objects.Picture
  * 
- * Documentation created: 22.01.2012 - 18:22:53 by Hans Ferchland
+ * Documentation created: 31.01.2012 - 09:08:08 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects;
 
-import java.awt.Color;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-import framework.core.Application;
-import framework.core.Canvas;
-import framework.core.JITApplet;
 import framework.core.Time;
 
-import framework.events.MouseControl;
+import framework.objects.base.AbstractPicture;
 
 /**
  * The Class Picture that can be used for drawing custom images.
  * 
  * @author Hans Ferchland
  */
-public class Picture extends CanvasObject implements MouseControl {
-
-	/** The image to display. */
-	private Image image;
-
+public class Picture extends AbstractPicture {
+	
 	/**
 	 * Instantiates a new picture.
 	 * 
@@ -69,192 +55,18 @@ public class Picture extends CanvasObject implements MouseControl {
 	 *            the image
 	 */
 	public Picture(Image image) {
-		super(0, 0);
-		this.image = image;
-		Canvas.getCanvas().draw(this, Color.white, null);
-		Application.getInstance().addMouseControl(this);
+		super(image);
 	}
-
+	
 	/**
 	 * Instantiates a new picture.
-	 * <p>
-	 * This constructor will set the position and will load your image from your
-	 * base directory.
-	 * </p>
-	 * e.g. "my_picture.jpg" or "pictures//my_picture.jpg"
-	 * 
-	 * @param xPos
-	 *            the initial x position
-	 * @param yPos
-	 *            the initial y position
-	 * @param imagePath
-	 *            the image path
+	 *
+	 * @param xPos the x pos
+	 * @param yPos the y pos
+	 * @param imagePath the image path
 	 */
 	public Picture(int xPos, int yPos, String imagePath) {
-		super(xPos, yPos);
-		this.image = null;
-
-		try {
-			if (Application.getInstance().isApplet()) {
-				JITApplet applet = Application.getInstance().getApplet();
-
-				image = ImageIO.read(new URL(applet.getCodeBase(), imagePath));
-
-			} else
-				image = ImageIO.read(new File(imagePath));
-		} catch (IllegalArgumentException iae) {
-			System.err
-			.println("Could not find image in path: "
-					+ imagePath
-					+ "! Please check if the image is there. The default path is your project directory!");
-		} catch (IOException ioe) {
-			System.err.println("Error during image-loading!");
-		}
-		
-		Canvas.getCanvas().draw(this, Color.white, null);
-		Application.getInstance().addMouseControl(this);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see objects.CanvasObject#draw()
-	 */
-	@Override
-	public void draw() {
-		if (isVisible() && image != null) {
-			Canvas canvas = Canvas.getCanvas();
-			canvas.drawImage(image, xPosition, yPosition);
-		}
-	}
-
-	/**
-	 * Erase the text from screen.
-	 */
-	protected void erase() {
-		if (isVisible()) {
-			image.flush();
-			image = null;
-
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see framework.core.UpdateObject#dispose()
-	 */
-	@Override
-	public boolean dispose() {
-		Application.getInstance().removeMouseControl(this);
-		return super.dispose();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see objects.CanvasObject#containsPoint(java.awt.Point)
-	 */
-	@Override
-	protected boolean containsPoint(Point point) {
-		Point topLeft = new Point(xPosition, yPosition);
-		Point bottomRight = new Point(xPosition + image.getHeight(null),
-				yPosition + image.getWidth(null));
-		if (point.x < topLeft.x || point.x > bottomRight.x) {
-			return false;
-		}
-		if (point.y < topLeft.y || point.y > bottomRight.y) {
-			return false;
-		}
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseClicked(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseClicked(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseEntered(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseEntered(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseExited(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseExited(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mousePressed(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mousePressed(MouseEvent event) {
-		if (containsPoint(new Point(event.getX(), event.getY()))) {
-			clickStarted = true;
-			onClick(event);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseReleased(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseReleased(MouseEvent event) {
-		if (containsPoint(new Point(event.getX(), event.getY()))
-				&& clickStarted) {
-			clickStarted = true;
-			onRelease(event);
-		}
-		clickStarted = false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseWheelMoved(java.awt.event.MouseWheelEvent)
-	 */
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseDragged(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseDragged(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseMoved(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseMoved(MouseEvent event) {
-
+		super(xPos, yPos, imagePath);
 	}
 
 	/*

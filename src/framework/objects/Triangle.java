@@ -30,20 +30,17 @@
  * File: Triangle.java
  * Type: framework.objects.Triangle
  * 
- * Documentation created: 22.01.2012 - 18:22:54 by Hans Ferchland
+ * Documentation created: 31.01.2012 - 09:18:49 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 
-import framework.core.Application;
-import framework.core.Canvas;
 import framework.core.Time;
 
-import framework.events.MouseControl;
+import framework.objects.base.AbstractTriangle;
 
 /**
  * A triangle that can be manipulated and that draws itself on a canvas.
@@ -52,23 +49,13 @@ import framework.events.MouseControl;
  * @version 1.0 (15 July 2000)
  */
 
-public class Triangle extends CanvasObject implements MouseControl {
-
-	/** The height. */
-	private int height;
-
-	/** The width. */
-	private int width;
+public class Triangle extends AbstractTriangle {
 
 	/**
 	 * Create a new triangle at default position with default color.
 	 */
 	public Triangle() {
-		super(50, 15);
-		height = 30;
-		width = 40;
-		color = Color.green;
-		Application.getInstance().addMouseControl(this);
+		super();
 	}
 
 	/**
@@ -86,206 +73,32 @@ public class Triangle extends CanvasObject implements MouseControl {
 	 *            the color
 	 */
 	public Triangle(int xPos, int yPos, int height, int width, Color color) {
-		super(xPos, yPos);
-		this.height = height;
-		this.width = width;
-		this.color = color;
-		Application.getInstance().addMouseControl(this);
+		super(xPos, yPos, height, width, color);
 	}
-
-	/**
-	 * Change the size to the new size (in pixels). Size must be >= 0.
-	 * 
-	 * @param newHeight
-	 *            the new height
-	 * @param newWidth
-	 *            the new width
-	 */
-	public void changeSize(int newHeight, int newWidth) {
-		erase();
-		height = newHeight;
-		width = newWidth;
-		draw();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see CanvasObject#changeColor(java.awt.Color)
-	 */
-	@Override
-	public void changeColor(Color newColor) {
-		super.changeColor(newColor);
-		draw();
-	}
-
-	/**
-	 * Draw the triangle with current specifications on screen.
-	 */
-	@Override
-	public void draw() {
-		if (isVisible()) {
-			Canvas canvas = Canvas.getCanvas();
-			int[] xpoints = { xPosition, xPosition + (width / 2),
-					xPosition - (width / 2) };
-			int[] ypoints = { yPosition, yPosition + height, yPosition + height };
-			canvas.draw(this, color, new Polygon(xpoints, ypoints, 3));
-		}
-	}
-
-	/**
-	 * Erase the triangle on screen.
-	 */
-	protected void erase() {
-		if (isVisible()) {
-			Canvas canvas = Canvas.getCanvas();
-			canvas.erase(this);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see framework.core.UpdateObject#dispose()
-	 */
-	@Override
-	public boolean dispose() {
-		Application.getInstance().removeMouseControl(this);
-		return super.dispose();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see objects.CanvasObject#containsPoint(java.awt.Point)
-	 */
-	@Override
-	protected boolean containsPoint(Point point) {
-		Point topLeft = new Point(xPosition, yPosition);
-		Point bottomRight = new Point(xPosition + width, yPosition + height);
-		if (point.x < topLeft.x || point.x > bottomRight.x) {
-			return false;
-		}
-		if (point.y < topLeft.y || point.y > bottomRight.y) {
-			return false;
-		}
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseClicked(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseClicked(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseEntered(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseEntered(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseExited(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseExited(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mousePressed(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mousePressed(MouseEvent event) {
-		if (containsPoint(new Point(event.getX(), event.getY()))) {
-			clickStarted = true;
-			onClick(event);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseReleased(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseReleased(MouseEvent event) {
-		if (containsPoint(new Point(event.getX(), event.getY()))
-				&& clickStarted) {
-			onRelease(event);
-		}
-		clickStarted = false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseWheelMoved(java.awt.event.MouseWheelEvent)
-	 */
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseDragged(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseDragged(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseMoved(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseMoved(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see framework.core.UpdateObject#update(framework.core.Time)
+	
+	/* (non-Javadoc)
+	 * @see framework.objects.base.AbstractTriangle#update(framework.core.Time)
 	 */
 	@Override
 	public void update(Time time) {
-
+		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see framework.core.UpdateObject#onClick(java.awt.event.MouseEvent)
+	/* (non-Javadoc)
+	 * @see framework.objects.base.AbstractTriangle#onClick(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void onClick(MouseEvent event) {
-
+		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see framework.core.UpdateObject#onRelease(java.awt.event.MouseEvent)
+	/* (non-Javadoc)
+	 * @see framework.objects.base.AbstractTriangle#onRelease(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void onRelease(MouseEvent event) {
-
+		
 	}
+
+	
 }

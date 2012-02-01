@@ -30,7 +30,7 @@
  * File: Text.java
  * Type: framework.objects.Text
  * 
- * Documentation created: 22.01.2012 - 18:22:56 by Hans Ferchland
+ * Documentation created: 31.01.2012 - 09:16:14 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects;
@@ -39,8 +39,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 
-import framework.core.Canvas;
 import framework.core.Time;
+import framework.objects.base.AbstractText;
 
 
 /**
@@ -48,27 +48,17 @@ import framework.core.Time;
  * 
  * @author Hans Ferchland
  */
-public class Text extends CanvasObject {
-
-	/** The text to display. */
-	private String text;
-	
-	/** The font used for text-painting. */
-	private Font font;
+public class Text extends AbstractText {
 
 	/**
-	 * Instantiates a new text with position and text.
+	 * Instantiates a new text.
 	 *
-	 * @param xPos the initial x position
-	 * @param yPos the initial y position
-	 * @param text the initial text
+	 * @param xPos the x pos
+	 * @param yPos the y pos
+	 * @param text the text
 	 */
 	public Text(int xPos, int yPos, String text) {
-		super(xPos, yPos);
-		this.text = text;
-		this.font = new Font("helvetica", Font.BOLD, 14);
-		Canvas.getCanvas().setFont(font);
-		color = Color.black;
+		super(xPos, yPos, text);
 	}
 	
 	/**
@@ -81,58 +71,11 @@ public class Text extends CanvasObject {
 	 * @param color the color
 	 */
 	public Text(int xPos, int yPos, String text, Font font, Color color) {
-		super(xPos, yPos);
-		this.text = text;
-		this.font = font;
-		this.color = color;
-		Canvas.getCanvas().setFont(font);
-		Canvas.getCanvas().draw(this, color, null);
+		super(xPos, yPos, text, font, color);
 	}
-	
-	/* (non-Javadoc)
-	 * @see objects.CanvasObject#draw()
-	 */
-	@Override
-	public void draw() {
-        if(isVisible()) {
-            Canvas canvas = Canvas.getCanvas();
-            canvas.setForegroundColor(color);
-            canvas.setFont(font);
-            canvas.drawString(text, xPosition, yPosition);
-        }
-	}
-	
-    /* (non-Javadoc)
-     * @see CanvasObject#changeColor(java.awt.Color)
-     */
-    @Override
-    public void changeColor(Color newColor) {
-    	super.changeColor(newColor);
-    	draw();
-    }
-    
-    /**
-     * Changes the text to display.
-     *
-     * @param text the new text
-     */
-    public void changeText(String text) {
-    	this.text = text;
-    }
-    
-    /**
-     * Erase the text from screen.
-     */
-    protected void erase()
-    {
-        if(isVisible()) {
-            Canvas canvas = Canvas.getCanvas();
-            canvas.eraseString(text, xPosition, yPosition);
-        }
-    }
 
 	/* (non-Javadoc)
-	 * @see framework.core.UpdateObject#update(framework.core.Time)
+	 * @see framework.objects.base.AbstractText#update(framework.core.Time)
 	 */
 	@Override
 	public void update(Time time) {
@@ -140,7 +83,7 @@ public class Text extends CanvasObject {
 	}
 
 	/* (non-Javadoc)
-	 * @see framework.core.UpdateObject#onClick(java.awt.event.MouseEvent)
+	 * @see framework.objects.base.AbstractText#onClick(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void onClick(MouseEvent event) {
@@ -148,10 +91,12 @@ public class Text extends CanvasObject {
 	}
 
 	/* (non-Javadoc)
-	 * @see framework.core.UpdateObject#onRelease(java.awt.event.MouseEvent)
+	 * @see framework.objects.base.AbstractText#onRelease(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public void onRelease(MouseEvent event) {
 		
 	}
+
+	
 }

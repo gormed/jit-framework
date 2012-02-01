@@ -36,16 +36,11 @@
 package framework.objects;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.*;
 
-import framework.core.Application;
-import framework.core.Canvas;
 import framework.core.Time;
 
-import framework.events.MouseControl;
+import framework.objects.base.AbstractCircle;
 
 /**
  * A circle that can be manipulated and that draws itself on a canvas.
@@ -54,18 +49,13 @@ import framework.events.MouseControl;
  * @version 1.0 (15 July 2000)
  */
 
-public class Circle extends CanvasObject implements MouseControl {
-	/** The diameter of the circle. */
-	protected int diameter;
+public class Circle extends AbstractCircle {
 
 	/**
 	 * Create a new circle at default position with default color.
 	 */
 	public Circle() {
-		super(20, 60);
-		diameter = 30;
-		color = Color.BLUE;
-		Application.getInstance().addMouseControl(this);
+		super();
 	}
 
 	/**
@@ -81,173 +71,9 @@ public class Circle extends CanvasObject implements MouseControl {
 	 *            the initial color
 	 */
 	public Circle(int xPos, int yPos, int diameter, Color color) {
-		super(xPos, yPos);
-		this.diameter = diameter;
-		this.color = color;
-		Application.getInstance().addMouseControl(this);
+		super(xPos, yPos, diameter, color);
 	}
-
-	/**
-	 * Change the size to the new size (in pixels). Size must be >= 0.
-	 * 
-	 * @param newDiameter
-	 *            the new diameter
-	 */
-	public void changeSize(int newDiameter) {
-		erase();
-		diameter = newDiameter;
-		draw();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see CanvasObject#changeColor(java.awt.Color)
-	 */
-	@Override
-	public void changeColor(Color newColor) {
-		super.changeColor(newColor);
-		draw();
-	}
-
-	/**
-	 * Draw the circle with current specifications on screen.
-	 */
-	@Override
-	public void draw() {
-		if (isVisible()) {
-			Canvas canvas = Canvas.getCanvas();
-			canvas.draw(this, color, new Ellipse2D.Double(xPosition, yPosition,
-					diameter, diameter));
-		}
-	}
-
-	/**
-	 * Erase the circle on screen.
-	 */
-	protected void erase() {
-		if (isVisible()) {
-			Canvas canvas = Canvas.getCanvas();
-			canvas.erase(this);
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see framework.core.UpdateObject#dispose()
-	 */
-	@Override
-	public boolean dispose() {
-
-		Application.getInstance().removeMouseControl(this);
-		return super.dispose();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see objects.CanvasObject#containsPoint(java.awt.Point)
-	 */
-	@Override
-	protected boolean containsPoint(Point point) {
-		Point topLeft = new Point(xPosition, yPosition);
-		Point bottomRight = new Point(xPosition + diameter, yPosition
-				+ diameter);
-		if (point.x < topLeft.x || point.x > bottomRight.x) {
-			return false;
-		}
-		if (point.y < topLeft.y || point.y > bottomRight.y) {
-			return false;
-		}
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseClicked(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseClicked(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseEntered(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseEntered(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseExited(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseExited(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mousePressed(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mousePressed(MouseEvent event) {
-		if (containsPoint(new Point(event.getX(), event.getY()))) {
-			clickStarted = true;
-			onClick(event);
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseReleased(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseReleased(MouseEvent event) {
-		if (containsPoint(new Point(event.getX(), event.getY()))
-				&& clickStarted) {
-			onRelease(event);
-		}
-		clickStarted = false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseWheelMoved(java.awt.event.MouseWheelEvent)
-	 */
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseDragged(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseDragged(MouseEvent event) {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see events.MouseControl#mouseMoved(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseMoved(MouseEvent event) {
-
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
