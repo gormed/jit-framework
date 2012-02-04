@@ -40,13 +40,12 @@ import java.awt.Point;
 
 import framework.core.UpdateObject;
 
-
 /**
- * The Class CanvasObject is an abstract base object for all objects that will be painted. 
- * If you want to create oneinherit this one.
+ * The abstract class CanvasObject is a base object for all objects that will be
+ * painted. If you want to create one inherit this one.
  * 
  * @author Hans Ferchland
- * 
+ * @see UpdateObject
  */
 public abstract class CanvasObject extends UpdateObject {
 
@@ -83,7 +82,7 @@ public abstract class CanvasObject extends UpdateObject {
 	}
 
 	/**
-	 * Gets the position.
+	 * Gets the position of the object.
 	 * 
 	 * @return the position
 	 */
@@ -92,7 +91,7 @@ public abstract class CanvasObject extends UpdateObject {
 	}
 
 	/**
-	 * Sets the position.
+	 * Sets the position of this object.
 	 * 
 	 * @param xPos
 	 *            the x position
@@ -105,7 +104,7 @@ public abstract class CanvasObject extends UpdateObject {
 	}
 
 	/**
-	 * Changes the color.
+	 * Changes the color of this object.
 	 * 
 	 * @param newColor
 	 *            the new color
@@ -115,15 +114,15 @@ public abstract class CanvasObject extends UpdateObject {
 	}
 
 	/**
-	 * Draws the CanvasObject.
+	 * Draws the CanvasObject on the canvas.
 	 */
 	public abstract void draw();
-	
+
 	/**
 	 * Erase the CanvasObject from screen.
 	 */
 	protected abstract void erase();
-	
+
 	/**
 	 * Make this CanvasObject visible. If it was already visible, do nothing.
 	 */
@@ -133,16 +132,17 @@ public abstract class CanvasObject extends UpdateObject {
 	}
 
 	/**
-	 * Make this CanvasObject invisible. If it was already invisible, do nothing.
+	 * Make this CanvasObject invisible. If it was already invisible, do
+	 * nothing.
 	 */
 	public void makeInvisible() {
 		erase();
 		isVisible = false;
 	}
-	
+
 	/**
 	 * Checks if a CanvasObject is visible.
-	 *
+	 * 
 	 * @return true, if it is visible
 	 */
 	public boolean isVisible() {

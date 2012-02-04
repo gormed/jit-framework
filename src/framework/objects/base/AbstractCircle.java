@@ -48,13 +48,49 @@ import framework.core.Time;
 import framework.events.MouseControl;
 
 /**
- * A circle that can be manipulated and that draws itself on a canvas.
+ * An abstract circle class, that can be manipulated and that draws itself on a canvas.
+ * 
+ * <p>
+ * Using this class provides an easy way to implement the methods
+ * <code>public abstract void update(Time time)</code>,
+ * <code>public abstract void
+ * onClick(MouseEvent event)</code> and
+ * <code>public abstract void onRelease(MouseEvent event)</code>.
+ * </p>
+ * <p>
+ * e.g.:
+ * </p>
+ * <code>
+ * <pre>
+ * 		
+ *	// creates a new inner class with base-class from 
+ *	// AbstractCircle and implement the abstract methods
+ * 	AbstractCircle circle = new AbstractCircle(10, 10, 5, Color.RED) {
+ * 		public void update(Time time) {
+ * 			// do nothing continuously
+ * 		}
+ * 		public void onRelease(MouseEvent event) {
+ * 			// on releasing the object with mouse, change diameter back to 5
+ * 			changeSize(5);
+ * 		}
+ * 		public void onClick(MouseEvent event) {
+ * 			// on clicking the object with mouse, change diameter to 10
+ * 			changeSize(10);
+ * 		}
+ * 	};
+ * 	// show the circle
+ * 	circle.makeVisible();
+ * </pre>
+ * </code>
+ * 
  * 
  * @author Michael Kölling and David J. Barnes
- * @version 1.0 (15 July 2000)
+ * @author Hans Ferchland (enhanced)
+ * @version 1.1 (01.02.2012)
  */
 
-public abstract class AbstractCircle extends CanvasObject implements MouseControl {
+public abstract class AbstractCircle extends CanvasObject implements
+		MouseControl {
 	/** The diameter of the circle. */
 	protected int diameter;
 
@@ -132,7 +168,9 @@ public abstract class AbstractCircle extends CanvasObject implements MouseContro
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#dispose()
 	 */
 	@Override
@@ -248,22 +286,25 @@ public abstract class AbstractCircle extends CanvasObject implements MouseContro
 
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#update(framework.core.Time)
 	 */
 	@Override
 	public abstract void update(Time time);
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#onClick(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public abstract void onClick(MouseEvent event);
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#onRelease(java.awt.event.MouseEvent)
 	 */
 	@Override

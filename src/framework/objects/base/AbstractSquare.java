@@ -46,10 +46,17 @@ import framework.core.Time;
 import framework.events.MouseControl;
 
 /**
- * A square that can be manipulated and that draws itself on a canvas.
- * 
+ * An abstract square that can be manipulated and that draws itself on a canvas.
+ * <p>
+ * Using this class provides an easy way to implement the methods
+ * <code>public abstract void update(Time time)</code>,
+ * <code>public abstract void
+ * onClick(MouseEvent event)</code> and
+ * <code>public abstract void onRelease(MouseEvent event)</code>.
+ * </p>
  * @author Michael Kölling and David J. Barnes
- * @version 1.0 (15 July 2000)
+ * @author Hans Ferchland
+ * @version 1.1 (04.02.2012)
  */
 
 public abstract class AbstractSquare extends CanvasObject implements MouseControl {

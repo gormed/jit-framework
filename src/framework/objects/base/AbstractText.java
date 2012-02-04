@@ -42,9 +42,13 @@ import java.awt.event.MouseEvent;
 import framework.core.Canvas;
 import framework.core.Time;
 
-
 /**
- * The Class Text displays text on a given position, with a certain color and font.
+ * The abstract class <code>AbstractText</code> displays text on a given
+ * position, with a certain color and font.
+ * <p>
+ * Using this class provides an easy way to implement the method
+ * <code>public abstract void update(Time time)</code> with own behavior.
+ * </p>
  * 
  * @author Hans Ferchland
  */
@@ -52,16 +56,19 @@ public abstract class AbstractText extends CanvasObject {
 
 	/** The text to display. */
 	private String text;
-	
+
 	/** The font used for text-painting. */
 	private Font font;
 
 	/**
 	 * Instantiates a new text with position and text.
-	 *
-	 * @param xPos the initial x position
-	 * @param yPos the initial y position
-	 * @param text the initial text
+	 * 
+	 * @param xPos
+	 *            the initial x position
+	 * @param yPos
+	 *            the initial y position
+	 * @param text
+	 *            the initial text
 	 */
 	public AbstractText(int xPos, int yPos, String text) {
 		super(xPos, yPos);
@@ -70,15 +77,20 @@ public abstract class AbstractText extends CanvasObject {
 		Canvas.getCanvas().setFont(font);
 		color = Color.black;
 	}
-	
+
 	/**
 	 * Instantiates a new text with a given position, text, font and color.
-	 *
-	 * @param xPos the initial x position
-	 * @param yPos the initial y position
-	 * @param text the initial text
-	 * @param font the initial font
-	 * @param color the color
+	 * 
+	 * @param xPos
+	 *            the initial x position
+	 * @param yPos
+	 *            the initial y position
+	 * @param text
+	 *            the initial text
+	 * @param font
+	 *            the initial font
+	 * @param color
+	 *            the color
 	 */
 	public AbstractText(int xPos, int yPos, String text, Font font, Color color) {
 		super(xPos, yPos);
@@ -88,64 +100,72 @@ public abstract class AbstractText extends CanvasObject {
 		Canvas.getCanvas().setFont(font);
 		Canvas.getCanvas().draw(this, color, null);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see objects.CanvasObject#draw()
 	 */
 	@Override
 	public void draw() {
-        if(isVisible()) {
-            Canvas canvas = Canvas.getCanvas();
-            canvas.setForegroundColor(color);
-            canvas.setFont(font);
-            canvas.drawString(text, xPosition, yPosition);
-        }
+		if (isVisible()) {
+			Canvas canvas = Canvas.getCanvas();
+			canvas.setForegroundColor(color);
+			canvas.setFont(font);
+			canvas.drawString(text, xPosition, yPosition);
+		}
 	}
-	
-    /* (non-Javadoc)
-     * @see CanvasObject#changeColor(java.awt.Color)
-     */
-    @Override
-    public void changeColor(Color newColor) {
-    	super.changeColor(newColor);
-    	draw();
-    }
-    
-    /**
-     * Changes the text to display.
-     *
-     * @param text the new text
-     */
-    public void changeText(String text) {
-    	this.text = text;
-    }
-    
-    /**
-     * Erase the text from screen.
-     */
-    protected void erase()
-    {
-        if(isVisible()) {
-            Canvas canvas = Canvas.getCanvas();
-            canvas.eraseString(text, xPosition, yPosition);
-        }
-    }
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see CanvasObject#changeColor(java.awt.Color)
+	 */
+	@Override
+	public void changeColor(Color newColor) {
+		super.changeColor(newColor);
+		draw();
+	}
+
+	/**
+	 * Changes the text to display.
+	 * 
+	 * @param text
+	 *            the new text
+	 */
+	public void changeText(String text) {
+		this.text = text;
+	}
+
+	/**
+	 * Erase the text from screen.
+	 */
+	protected void erase() {
+		if (isVisible()) {
+			Canvas canvas = Canvas.getCanvas();
+			canvas.eraseString(text, xPosition, yPosition);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#update(framework.core.Time)
 	 */
 	@Override
 	public abstract void update(Time time);
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#onClick(java.awt.event.MouseEvent)
 	 */
 	@Override
 	public abstract void onClick(MouseEvent event);
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see framework.core.UpdateObject#onRelease(java.awt.event.MouseEvent)
 	 */
 	@Override

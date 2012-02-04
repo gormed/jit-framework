@@ -53,8 +53,14 @@ import framework.core.Time;
 import framework.events.MouseControl;
 
 /**
- * The Class Picture that can be used for drawing custom images.
- * 
+ * An abstract picture class, that can be used for drawing custom images.
+ * <p>
+ * Using this class provides an easy way to implement the methods
+ * <code>public abstract void update(Time time)</code>,
+ * <code>public abstract void
+ * onClick(MouseEvent event)</code> and
+ * <code>public abstract void onRelease(MouseEvent event)</code>.
+ * </p>
  * @author Hans Ferchland
  */
 public abstract class AbstractPicture extends CanvasObject implements

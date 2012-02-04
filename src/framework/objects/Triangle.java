@@ -46,7 +46,8 @@ import framework.objects.base.AbstractTriangle;
  * A triangle that can be manipulated and that draws itself on a canvas.
  * 
  * @author Michael Kölling and David J. Barnes
- * @version 1.0 (15 July 2000)
+ * @author Hans Ferchland
+ * @version 1.1 (04.02.2012)
  */
 
 public class Triangle extends AbstractTriangle {

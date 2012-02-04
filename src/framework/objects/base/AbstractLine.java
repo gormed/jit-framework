@@ -44,9 +44,13 @@ import framework.core.Time;
 
 
 /**
- * The Class Line defines simple lines from a staring point to an end point.
+ * An abstract Line class that defines a simple line from a staring point to an end point.
  * <p>
  * You cannot make lines thicker or thinner!
+ * </p>
+ * <p>
+ * Using this class provides an easy way to implement the method
+ * <code>public abstract void update(Time time)</code> for own behavior.
  * </p>
  *
  * @author Hans Ferchland

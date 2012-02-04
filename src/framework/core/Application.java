@@ -30,7 +30,7 @@
  * File: Application.java
  * Type: framework.core.Application
  * 
- * Documentation created: 31.01.2012 - 22:33:03 by Hans Ferchland
+ * Documentation created: 04.02.2012 - 13:17:19 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.core;
@@ -190,29 +190,31 @@ public final class Application {
 	/** The loader function to execute. */
 	private LoaderFunction loaderFunction;
 
+	/** The worker thread set contains all working threads. */
 	private HashSet<WorkerThread> workerThreadSet;
 
 	/**
-	 * The Class LoaderFunction.
+	 * The Class LoaderFunction stores information for methods of classes.
 	 */
 	class LoaderFunction {
 
-		/** The carryer. */
-		Object carryer;
+		/** The carrier object of a method. */
+		Object carrier;
 
-		/** The function name. */
+		/** The method of a given class. */
 		Method method;
 
 		/**
 		 * Instantiates a new loader function.
 		 * 
-		 * @param instance
-		 *            the instance
-		 * @param functionName
-		 *            the function name
+		 * @param carryer
+		 *            the instance of an object that carries the desired method
+		 *            <code>method</code>.
+		 * @param method
+		 *            the method to be stored
 		 */
-		public LoaderFunction(Object carryer, Method method) {
-			this.carryer = carryer;
+		public LoaderFunction(Object carrier, Method method) {
+			this.carrier = carrier;
 			this.method = method;
 		}
 	}
@@ -259,7 +261,7 @@ public final class Application {
 	}
 
 	/**
-	 * Initializes the Application.
+	 * Initializes the Application as an applet.
 	 * 
 	 * <p>
 	 * This method has to be called before the application is started through
@@ -283,13 +285,32 @@ public final class Application {
 			System.out.println("Application initialized!");
 		}
 	}
+	
+	/**
+	 * Initializes the Application as a JFrame.
+	 * 
+	 * <p>
+	 * This method has to be called before the application is started through
+	 * <code>start()</code>.
+	 * </p>
+	 */
+	public void initialize() {
+		initialize(null);
+	}
 
 	/**
 	 * Starts the application by initiating a infinite game-loop. The
 	 * "isRunning" flag indicates the termination of the application.
 	 * 
+	 * <p>
+	 * If you call <code>start()</code> before <code>initialize()</code> there
+	 * will be errors! Make sure you call the init first!
+	 * </p>
+	 * 
+	 * <p>
 	 * You can terminate the loop by calling the <code>terminate()</code>
 	 * -method.
+	 * </p>
 	 */
 	public void start() {
 		if (state == ApplicationState.INITIALIZE) {
@@ -305,6 +326,9 @@ public final class Application {
 
 			setVisible(true);
 			state = ApplicationState.RUNNING;
+		} else if (state == ApplicationState.CREATED) {
+			initialize();
+			start();
 		} else {
 			System.out
 					.println("The Application is not initialized! Please call initialize() before start!");
@@ -356,10 +380,10 @@ public final class Application {
 	 */
 	public void terminate() {
 		boolean isApplet = isApplet();
-		
+
 		state = ApplicationState.EXITING;
 		isRunning = false;
-		
+
 		if (updateThread != null) {
 			try {
 				updateThread.interrupt();

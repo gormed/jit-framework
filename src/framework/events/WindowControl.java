@@ -40,51 +40,78 @@ import java.awt.event.WindowListener;
 
 /**
  * The Class WindowControl listens for window-events.
- *
+ * <p>
+ * <b>Note</b> that if you are using an applet, a <code>WindowListener</code>
+ * will be ignored if added to the <code>Application</code>. The only possible
+ * way to handle those events is using/overriding the methods from <code>JITApplet</code>.
+ * </p>
+ * 
  * @author Hans Ferchland
  * @see WindowListener
  */
 public interface WindowControl extends WindowListener {
 
-
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
 	 */
 	@Override
 	public void windowActivated(WindowEvent event);
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
 	 */
 	@Override
 	public void windowClosed(WindowEvent event);
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
 	 */
 	@Override
 	public void windowClosing(WindowEvent event);
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent
+	 * )
 	 */
 	@Override
 	public void windowDeactivated(WindowEvent event);
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent
+	 * )
 	 */
 	@Override
 	public void windowDeiconified(WindowEvent event);
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
 	 */
 	@Override
 	public void windowIconified(WindowEvent event);
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
 	 */
 	@Override
 	public void windowOpened(WindowEvent event);

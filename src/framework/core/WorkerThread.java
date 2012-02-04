@@ -128,7 +128,7 @@ public class WorkerThread extends Thread {
 	 *            the loader function to load the method-parameters.
 	 */
 	WorkerThread(LoaderFunction loader) {
-		carrierObject = loader.carryer;
+		carrierObject = loader.carrier;
 		loaderFunction = loader.method;
 		setName("[LoaderFunction] " + TAG + " - " + loaderFunction.getName()
 				+ "()");

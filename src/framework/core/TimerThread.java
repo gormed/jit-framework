@@ -134,22 +134,24 @@ public class TimerThread extends TimerTask {
 	 */
 	@Override
 	public boolean cancel() {
+		removeListener.clear();
+		addListener.clear();
+		timedListener.clear();
 		return super.cancel();
 	}
 
 	/**
-	 * Adds a specific timed listner.
+	 * Adds a specific timed listener.
 	 * 
 	 * @param t
 	 *            the timed lister to add
 	 */
 	void addTimedListner(TimedControl t) {
-		//timedListener.put(t, 0l);
 		addListener.add(t);
 	}
 
 	/**
-	 * Removes a specific timed listner.
+	 * Removes a specific timed listener.
 	 * 
 	 * @param t
 	 *            the timed lister to remove

@@ -41,7 +41,7 @@ import java.awt.event.KeyListener;
 /**
  * The Class KeyboardControl is a listener for the key-events.
  * <p>
- * You just have to implement this interface and drop you key-handling in:
+ * You just have to implement this interface and drop your key-handling in:
  * <code>keyPressed()</code>, <code>keyReleased()</code> and/or
  * <code>keyTyped()</code> method.
  * </p>

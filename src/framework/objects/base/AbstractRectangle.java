@@ -40,12 +40,19 @@ import java.awt.Point;
 
 import framework.core.Canvas;
 
-
 /**
- * The Class Rectangle that is used to draw colored rectangles, receive events,
- * check collision and so on.
+ * The abstract class <code>AbstractRectangle</code> that is used to draw colored
+ * rectangles, receive events, check collision and so on.
+ * <p>
+ * Using this class provides an easy way to implement the methods
+ * <code>public abstract void update(Time time)</code>,
+ * <code>public abstract void
+ * onClick(MouseEvent event)</code> and
+ * <code>public abstract void onRelease(MouseEvent event)</code>.
+ * </p>
  * 
  * @author Hans Ferchland
+ * @see AbstractSquare
  */
 public abstract class AbstractRectangle extends AbstractSquare {
 
@@ -64,17 +71,23 @@ public abstract class AbstractRectangle extends AbstractSquare {
 		height = 60;
 		color = Color.red;
 	}
-	
+
 	/**
 	 * Instantiates a new rectangle with given position, color and size.
-	 *
-	 * @param xPos the initial x position
-	 * @param yPos the initial y position
-	 * @param width the initial width
-	 * @param height the initial height
-	 * @param color the color
+	 * 
+	 * @param xPos
+	 *            the initial x position
+	 * @param yPos
+	 *            the initial y position
+	 * @param width
+	 *            the initial width
+	 * @param height
+	 *            the initial height
+	 * @param color
+	 *            the color
 	 */
-	public AbstractRectangle(int xPos, int yPos, int width, int height, Color color) {
+	public AbstractRectangle(int xPos, int yPos, int width, int height,
+			Color color) {
 		super();
 		this.xPosition = xPos;
 		this.yPosition = yPos;
