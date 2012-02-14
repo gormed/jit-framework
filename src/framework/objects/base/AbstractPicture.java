@@ -30,7 +30,7 @@
  * File: AbstractPicture.java
  * Type: framework.objects.base.AbstractPicture
  * 
- * Documentation created: 31.01.2012 - 10:03:10 by Hans Ferchland
+ * Documentation created: 13.02.2012 - 13:16:50 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects.base;
@@ -87,7 +87,7 @@ public abstract class AbstractPicture extends CanvasObject implements
 			height = image.getHeight(null);
 		}
 		Canvas.getCanvas().draw(this, Color.white, null);
-		Application.getInstance().addMouseControl(this);
+		addMouseControl();
 	}
 
 	/**
@@ -132,7 +132,7 @@ public abstract class AbstractPicture extends CanvasObject implements
 		}
 
 		Canvas.getCanvas().draw(this, Color.white, null);
-		Application.getInstance().addMouseControl(this);
+		addMouseControl();
 	}
 	
 	/**
@@ -296,6 +296,22 @@ public abstract class AbstractPicture extends CanvasObject implements
 	public void mouseMoved(MouseEvent event) {
 
 	}
+	
+	/* (non-Javadoc)
+	 * @see framework.events.MouseControl#addMouseControl()
+	 */
+	@Override
+	public void addMouseControl() {
+		Application.getInstance().addMouseControl(this);
+	}
+	
+	/* (non-Javadoc)
+	 * @see framework.events.MouseControl#removeMouseControl()
+	 */
+	@Override
+	public void removeMouseControl() {
+		Application.getInstance().removeMouseControl(this);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -320,4 +336,5 @@ public abstract class AbstractPicture extends CanvasObject implements
 	 */
 	@Override
 	public abstract void onRelease(MouseEvent event);
+	
 }

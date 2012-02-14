@@ -27,10 +27,10 @@
  * Email me for any questions: hans.ferchland[at]gmx.de
  * 
  * Project: JIT Framework
- * File: Square.java
- * Type: framework.objects.Square
+ * File: AbstractSquare.java
+ * Type: framework.objects.base.AbstractSquare
  * 
- * Documentation created: 22.01.2012 - 18:22:55 by Hans Ferchland
+ * Documentation created: 13.02.2012 - 13:16:38 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects.base;
@@ -71,7 +71,7 @@ public abstract class AbstractSquare extends CanvasObject implements MouseContro
 		super(60, 50);
 		size = 30;
 		color = Color.red;
-		Application.getInstance().addMouseControl(this);
+		addMouseControl();
 	}
 
 	/**
@@ -90,7 +90,7 @@ public abstract class AbstractSquare extends CanvasObject implements MouseContro
 		super(xPos, yPos);
 		this.size = size;
 		this.color = color;
-		Application.getInstance().addMouseControl(this);
+		addMouseControl();
 	}
 
 	/**
@@ -253,6 +253,22 @@ public abstract class AbstractSquare extends CanvasObject implements MouseContro
 	@Override
 	public void mouseMoved(MouseEvent event) {
 
+	}
+	
+	/* (non-Javadoc)
+	 * @see framework.events.MouseControl#addMouseControl()
+	 */
+	@Override
+	public void addMouseControl() {
+		Application.getInstance().addMouseControl(this);
+	}
+	
+	/* (non-Javadoc)
+	 * @see framework.events.MouseControl#removeMouseControl()
+	 */
+	@Override
+	public void removeMouseControl() {
+		Application.getInstance().removeMouseControl(this);
 	}
 
 	/*

@@ -30,7 +30,7 @@
  * File: AbstractTriangle.java
  * Type: framework.objects.base.AbstractTriangle
  * 
- * Documentation created: 31.01.2012 - 09:13:44 by Hans Ferchland
+ * Documentation created: 13.02.2012 - 13:17:06 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects.base;
@@ -75,7 +75,7 @@ public abstract class AbstractTriangle extends CanvasObject implements MouseCont
 		height = 30;
 		width = 40;
 		color = Color.green;
-		Application.getInstance().addMouseControl(this);
+		addMouseControl();
 	}
 
 	/**
@@ -97,7 +97,7 @@ public abstract class AbstractTriangle extends CanvasObject implements MouseCont
 		this.height = height;
 		this.width = width;
 		this.color = color;
-		Application.getInstance().addMouseControl(this);
+		addMouseControl();
 	}
 
 	/**
@@ -264,6 +264,22 @@ public abstract class AbstractTriangle extends CanvasObject implements MouseCont
 	@Override
 	public void mouseMoved(MouseEvent event) {
 
+	}
+	
+	/* (non-Javadoc)
+	 * @see framework.events.MouseControl#addMouseControl()
+	 */
+	@Override
+	public void addMouseControl() {
+		Application.getInstance().addMouseControl(this);
+	}
+	
+	/* (non-Javadoc)
+	 * @see framework.events.MouseControl#removeMouseControl()
+	 */
+	@Override
+	public void removeMouseControl() {
+		Application.getInstance().removeMouseControl(this);
 	}
 
 	/* (non-Javadoc)

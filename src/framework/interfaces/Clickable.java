@@ -30,7 +30,7 @@
  * File: Clickable.java
  * Type: framework.interfaces.Clickable
  * 
- * Documentation created: 22.01.2012 - 18:22:57 by Hans Ferchland
+ * Documentation created: 09.02.2012 - 11:22:49 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.interfaces;
@@ -57,4 +57,11 @@ public interface Clickable {
 	 * @param event the event
 	 */
 	void onRelease(MouseEvent event);
+	
+	/**
+	 * Checks if the object is clicked.
+	 *
+	 * @return true, if is clicked
+	 */
+	public boolean isClicked();
 }

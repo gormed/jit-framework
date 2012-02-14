@@ -30,7 +30,7 @@
  * File: AbstractCircle.java
  * Type: framework.objects.base.AbstractCircle
  * 
- * Documentation created: 31.01.2012 - 09:13:25 by Hans Ferchland
+ * Documentation created: 13.02.2012 - 13:16:21 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects.base;
@@ -48,7 +48,8 @@ import framework.core.Time;
 import framework.events.MouseControl;
 
 /**
- * An abstract circle class, that can be manipulated and that draws itself on a canvas.
+ * An abstract circle class, that can be manipulated and that draws itself on a
+ * canvas.
  * 
  * <p>
  * Using this class provides an easy way to implement the methods
@@ -63,8 +64,8 @@ import framework.events.MouseControl;
  * <code>
  * <pre>
  * 		
- *	// creates a new inner class with base-class from 
- *	// AbstractCircle and implement the abstract methods
+ * 	// creates a new inner class with base-class from 
+ * 	// AbstractCircle and implement the abstract methods
  * 	AbstractCircle circle = new AbstractCircle(10, 10, 5, Color.RED) {
  * 		public void update(Time time) {
  * 			// do nothing continuously
@@ -101,7 +102,7 @@ public abstract class AbstractCircle extends CanvasObject implements
 		super(20, 60);
 		diameter = 30;
 		color = Color.BLUE;
-		Application.getInstance().addMouseControl(this);
+		addMouseControl();
 	}
 
 	/**
@@ -120,7 +121,7 @@ public abstract class AbstractCircle extends CanvasObject implements
 		super(xPos, yPos);
 		this.diameter = diameter;
 		this.color = color;
-		Application.getInstance().addMouseControl(this);
+		addMouseControl();
 	}
 
 	/**
@@ -187,16 +188,15 @@ public abstract class AbstractCircle extends CanvasObject implements
 	 */
 	@Override
 	protected boolean containsPoint(Point point) {
-		Point topLeft = new Point(xPosition, yPosition);
-		Point bottomRight = new Point(xPosition + diameter, yPosition
-				+ diameter);
-		if (point.x < topLeft.x || point.x > bottomRight.x) {
+		Point center = new Point((int) (xPosition + diameter / 2),
+				(int) (yPosition + diameter / 2));
+
+		double distance = point.distance(center);
+		
+		if (distance <= diameter/2)
+			return true;
+		else
 			return false;
-		}
-		if (point.y < topLeft.y || point.y > bottomRight.y) {
-			return false;
-		}
-		return true;
 	}
 
 	/*
@@ -284,6 +284,22 @@ public abstract class AbstractCircle extends CanvasObject implements
 	@Override
 	public void mouseMoved(MouseEvent event) {
 
+	}
+	
+	/* (non-Javadoc)
+	 * @see framework.events.MouseControl#addMouseControl()
+	 */
+	@Override
+	public void addMouseControl() {
+		Application.getInstance().addMouseControl(this);
+	}
+	
+	/* (non-Javadoc)
+	 * @see framework.events.MouseControl#removeMouseControl()
+	 */
+	@Override
+	public void removeMouseControl() {
+		Application.getInstance().removeMouseControl(this);
 	}
 
 	/*

@@ -28,17 +28,20 @@
  * 
  * Project: JIT Framework
  * File: CanvasObject.java
- * Type: framework.objects.CanvasObject
+ * Type: framework.objects.base.CanvasObject
  * 
- * Documentation created: 22.01.2012 - 18:22:57 by Hans Ferchland
+ * Documentation created: 13.02.2012 - 13:15:18 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.objects.base;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 
+import framework.core.Application;
 import framework.core.UpdateObject;
+import framework.events.KeyboardControl;
 
 /**
  * The abstract class CanvasObject is a base object for all objects that will be
@@ -47,7 +50,8 @@ import framework.core.UpdateObject;
  * @author Hans Ferchland
  * @see UpdateObject
  */
-public abstract class CanvasObject extends UpdateObject {
+public abstract class CanvasObject extends UpdateObject implements
+		KeyboardControl {
 
 	/** The x position of the object. */
 	protected int xPosition;
@@ -79,6 +83,7 @@ public abstract class CanvasObject extends UpdateObject {
 		xPosition = xPos;
 		yPosition = yPos;
 		isVisible = false;
+		addKeyboardControl();
 	}
 
 	/**
@@ -149,6 +154,16 @@ public abstract class CanvasObject extends UpdateObject {
 		return isVisible;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see framework.interfaces.Clickable#isClicked()
+	 */
+	@Override
+	public boolean isClicked() {
+		return clickStarted;
+	}
+
 	/**
 	 * Check if an object contains a point. Must be implemented for each figure
 	 * because the check is special for every shape!
@@ -159,5 +174,54 @@ public abstract class CanvasObject extends UpdateObject {
 	 */
 	protected boolean containsPoint(Point point) {
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see framework.events.KeyboardControl#keyPressed(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyPressed(KeyEvent event) {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * framework.events.KeyboardControl#keyReleased(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyReleased(KeyEvent event) {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see framework.events.KeyboardControl#keyTyped(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyTyped(KeyEvent event) {
+
+	}
+
+	/* (non-Javadoc)
+	 * @see framework.events.KeyboardControl#addKeyboardControl()
+	 */
+	@Override
+	public void addKeyboardControl() {
+		Application.getInstance().addKeyboardControl(this);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see framework.events.KeyboardControl#removeKeyboardControl()
+	 */
+	@Override
+	public void removeKeyboardControl() {
+		Application.getInstance().removeKeyboardControl(this);
 	}
 }

@@ -30,7 +30,7 @@
  * File: MouseControl.java
  * Type: framework.events.MouseControl
  * 
- * Documentation created: 22.01.2012 - 18:22:54 by Hans Ferchland
+ * Documentation created: 13.02.2012 - 13:14:38 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.events;
@@ -121,5 +121,17 @@ public interface MouseControl extends MouseListener, MouseMotionListener,
 	 */
 	@Override
 	public void mouseMoved(MouseEvent event);
+
+	/**
+	 * Adds the mouse control to the application, so that it receives
+	 * mouse-events.
+	 */
+	public void addMouseControl();
+	
+	/**
+	 * Removes the mouse control from the application, so that it no longer
+	 * receives mouse-events.
+	 */
+	public void removeMouseControl();
 
 }

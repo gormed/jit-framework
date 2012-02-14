@@ -30,7 +30,7 @@
  * File: KeyboardControl.java
  * Type: framework.events.KeyboardControl
  * 
- * Documentation created: 22.01.2012 - 18:22:56 by Hans Ferchland
+ * Documentation created: 13.02.2012 - 13:13:52 by Hans Ferchland
  * 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 package framework.events;
@@ -88,5 +88,17 @@ public interface KeyboardControl extends KeyListener {
 	 */
 	@Override
 	public void keyTyped(KeyEvent event);
+
+	/**
+	 * Adds the keyboard control to the application, so that it receives
+	 * key-events.
+	 */
+	public void addKeyboardControl();
+
+	/**
+	 * Removes the keyboard control from the application, so that it no longer
+	 * receives key-events.
+	 */
+	public void removeKeyboardControl();
 
 }
