@@ -37,6 +37,7 @@ package framework.core;
 
 import javax.swing.*;
 
+//import framework.core.jit3d.JITCanvas3D;
 import framework.events.KeyboardControl;
 import framework.events.MouseControl;
 import framework.events.WindowControl;
@@ -124,6 +125,8 @@ public class Canvas {
 
 	/** The frame. */
 	private JFrame frame;
+	
+//	private JITCanvas3D canvas3d;
 
 	/** The container. */
 	private Container container;
@@ -206,6 +209,14 @@ public class Canvas {
 
 		container = this.applet;
 	}
+	
+//	private Canvas(int width, int height, JITCanvas3D canvas3D) {
+//		objects = new ArrayList<CanvasObject>();
+//		shapes = new HashMap<Object, ShapeDescription>();
+//		
+//		this.canvas3d = canvas3D;
+//		
+//	}
 
 	/**
 	 * Gets the frame.
